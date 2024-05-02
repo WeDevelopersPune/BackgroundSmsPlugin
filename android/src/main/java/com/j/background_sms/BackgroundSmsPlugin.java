@@ -15,6 +15,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import java.util.ArrayList;
 
 /** BackgroundSmsPlugin */
 public class BackgroundSmsPlugin implements FlutterPlugin, MethodCallHandler {
@@ -79,7 +80,17 @@ public class BackgroundSmsPlugin implements FlutterPlugin, MethodCallHandler {
           smsManager = SmsManager.getDefault();
         }
       }
-      smsManager.sendTextMessage(num, null, msg, null, null);
+      if(msg.length() < 80){
+        smsManager.sendTextMessage(num, null, msg, null, null);
+      } else{
+        int size = 80;
+        ArrayList<String> split = new ArrayList<>();
+        for (int i = 0; i <= msg.length() / size; i++) {
+            split.add(msg.substring(i * size, Math.min((i + 1) * size, msg.length())));
+        }
+        // System.out.println(split);
+        smsManager.sendMultipartTextMessage(num, null, split, null, null);
+      }
       result.success("Sent");
     } catch (Exception ex) {
       ex.printStackTrace();
