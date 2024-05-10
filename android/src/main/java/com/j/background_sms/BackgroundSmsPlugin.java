@@ -80,10 +80,10 @@ public class BackgroundSmsPlugin implements FlutterPlugin, MethodCallHandler {
           smsManager = SmsManager.getDefault();
         }
       }
-      if(msg.length() < 80){
+      if(msg.length() < 120){
         smsManager.sendTextMessage(num, null, msg, null, null);
       } else{
-        int size = 80;
+        int size = 120;
         ArrayList<String> split = new ArrayList<>();
         for (int i = 0; i <= msg.length() / size; i++) {
             split.add(msg.substring(i * size, Math.min((i + 1) * size, msg.length())));
